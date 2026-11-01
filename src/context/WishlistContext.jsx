@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 import { useCart } from './CartContext';
+import { getImageUrl } from '../utils/imageUrl';
 
 const WishlistContext = createContext(null);
 
@@ -82,9 +83,10 @@ export const WishlistProvider = ({ children }) => {
   const addToWishlist = (product) => {
     if (isInWishlist(product.id)) return;
 
-    const firstImage = Array.isArray(product.images) && product.images.length > 0
+    const rawFirstImage = Array.isArray(product.images) && product.images.length > 0
       ? product.images[0]
       : (product.images || 'https://placehold.co/300x300?text=Product');
+    const firstImage = getImageUrl(rawFirstImage);
 
     const cleanItem = {
       id: product.id,

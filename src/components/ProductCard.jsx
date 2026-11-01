@@ -5,6 +5,7 @@ import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { getColorHex } from './DynamicFilters';
 import { Plus, ShoppingBag, Sparkles, Star, Zap, Check, Heart, X } from 'lucide-react';
+import { getImageUrl } from '../utils/imageUrl';
 
 export default function ProductCard({ product, onSelectProduct }) {
   const navigate = useNavigate();
@@ -34,9 +35,9 @@ export default function ProductCard({ product, onSelectProduct }) {
 
   const displayPrice = isSale ? product.sale_price : product.price;
   const originalPrice = product.price;
-  const images = Array.isArray(product.images) && product.images.length > 0 ? product.images : [product.images || 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&auto=format&fit=crop&q=80'];
-  const firstImage = images[0];
-  const secondImage = images[1] || images[0];
+  const rawImages = Array.isArray(product.images) && product.images.length > 0 ? product.images : [product.images || 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&auto=format&fit=crop&q=80'];
+  const firstImage = getImageUrl(rawImages[0]);
+  const secondImage = getImageUrl(rawImages[1] || rawImages[0]);
 
   // Extract key attributes safely
   const sizes = Array.isArray(product.attributes)

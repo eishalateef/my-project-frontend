@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from './AuthContext';
 import { AlertCircle, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { getImageUrl } from '../utils/imageUrl';
 
 const CartContext = createContext(null);
 
@@ -201,7 +202,8 @@ export const CartProvider = ({ children }) => {
         return updated;
       } else {
         const unitPrice = Number(product.sale_price || product.price);
-        const firstImage = Array.isArray(product.images) ? product.images[0] : product.images;
+        const rawFirstImage = Array.isArray(product.images) ? product.images[0] : product.images;
+        const firstImage = getImageUrl(rawFirstImage);
 
         return [
           ...prev,

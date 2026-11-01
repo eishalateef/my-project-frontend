@@ -9,6 +9,7 @@ import LuxuryCertificateModal from '../components/LuxuryCertificateModal';
 import FlexiPayModal from '../components/FlexiPayModal';
 import ProductCard from '../components/ProductCard';
 import { getColorHex } from '../components/DynamicFilters';
+import { getImageUrl } from '../utils/imageUrl';
 import {
   ShoppingBag,
   Sparkles,
@@ -196,9 +197,10 @@ export default function ProductDetail({ productId: propProductId, onBack, onSele
   }
 
   const { grouped_attributes, grouped_attributes_detailed, related_products } = productData;
-  const images = Array.isArray(product.images) && product.images.length > 0
+  const rawImages = Array.isArray(product.images) && product.images.length > 0
     ? product.images
     : [product.images || 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&auto=format&fit=crop&q=80'];
+  const images = rawImages.map((img) => getImageUrl(img));
   const isSale = product.sale_price && Number(product.sale_price) < Number(product.price);
   const currentPrice = isSale ? product.sale_price : product.price;
 
@@ -455,7 +457,7 @@ export default function ProductDetail({ productId: propProductId, onBack, onSele
             border: '1px solid var(--border-color)',
           }}>
             <img
-              src={activeColorImage || images[selectedImage] || images[0]}
+              src={activeColorImage ? getImageUrl(activeColorImage) : (images[selectedImage] || images[0])}
               alt={product.name}
               style={{
                 position: 'absolute',

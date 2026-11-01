@@ -5,6 +5,7 @@ import { useStore } from '../context/StoreContext';
 import ProductCard from '../components/ProductCard';
 import SizeChartModal from '../components/SizeChartModal';
 import LuxuryCertificateModal from '../components/LuxuryCertificateModal';
+import { getImageUrl } from '../utils/imageUrl';
 import {
   Sparkles,
   ArrowRight,
@@ -763,7 +764,7 @@ export default function Home({ onSelectProduct, onViewCatalog }) {
                 overflow: 'hidden',
               }}>
                 <img
-                  src={cat.image}
+                  src={getImageUrl(cat.image)}
                   alt={cat.name}
                   className="cat-hero-img"
                   style={{
