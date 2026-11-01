@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import api from '../../api/axios';
 import { useStore } from '../../context/StoreContext';
 import {
   Plus,
@@ -32,7 +32,7 @@ export default function CategoryManager() {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('/api/categories');
+      const res = await api.get('/api/categories');
       setCategories(res.data || []);
     } catch (err) {
       console.error('Error fetching categories:', err);
@@ -56,7 +56,7 @@ export default function CategoryManager() {
     formData.append('image', file);
 
     try {
-      const res = await axios.post('/api/admin/categories/upload-image', formData, {
+      const res = await api.post('/api/admin/categories/upload-image', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
@@ -82,14 +82,14 @@ export default function CategoryManager() {
 
     try {
       if (editingCategory) {
-        await axios.put(`/api/admin/categories/${editingCategory.id}`, {
+        await api.put(`/api/admin/categories/${editingCategory.id}`, {
           name: newCatName.trim(),
           image: newCatImage || null,
           parent_id: newCatParentId ? Number(newCatParentId) : null,
         });
         setMessage('Category updated successfully!');
       } else {
-        await axios.post('/api/admin/categories', {
+        await api.post('/api/admin/categories', {
           store_id: store?.id || 1,
           name: newCatName.trim(),
           image: newCatImage || 'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600&auto=format&fit=crop&q=80',
@@ -133,7 +133,7 @@ export default function CategoryManager() {
   const handleDelete = async (id) => {
     if (!confirm('Are you sure you want to delete this category? Associated products may be unassigned.')) return;
     try {
-      await axios.delete(`/api/admin/categories/${id}`);
+      await api.delete(`/api/admin/categories/${id}`);
       if (editingCategory?.id === id) {
         handleCancelEdit();
       }

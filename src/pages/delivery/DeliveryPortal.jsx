@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import axios from 'axios';
+import api from '../../api/axios';
 import { useAuth } from '../../context/AuthContext';
 import { useStore } from '../../context/StoreContext';
 import {
@@ -62,11 +62,11 @@ export default function DeliveryPortal() {
       const queryTab = activeTab === 'cash_ledger' ? 'delivered' : activeTab;
 
       const [ordersRes, statsRes] = await Promise.all([
-        axios.get(`/api/delivery/orders?tab=${queryTab}`, { headers }).catch(() =>
-          axios.get(`/api/delivery-public/orders?tab=${queryTab}`)
+        api.get(`/api/delivery/orders?tab=${queryTab}`, { headers }).catch(() =>
+          api.get(`/api/delivery-public/orders?tab=${queryTab}`)
         ),
-        axios.get('/api/delivery/stats', { headers }).catch(() =>
-          axios.get('/api/delivery-public/stats')
+        api.get('/api/delivery/stats', { headers }).catch(() =>
+          api.get('/api/delivery-public/stats')
         ),
       ]);
 
@@ -97,11 +97,11 @@ export default function DeliveryPortal() {
       const token = localStorage.getItem('flexi_token');
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-      await axios.patch(`/api/delivery/orders/${orderId}/status`, {
+      await api.patch(`/api/delivery/orders/${orderId}/status`, {
         delivery_status: newStatus,
         delivery_notes: notes,
       }, { headers }).catch(() =>
-        axios.patch(`/api/delivery-public/orders/${orderId}/status`, {
+        api.patch(`/api/delivery-public/orders/${orderId}/status`, {
           delivery_status: newStatus,
           delivery_notes: notes,
         })

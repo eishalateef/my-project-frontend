@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import {
   Sparkles,
   CheckCircle2,
@@ -69,7 +69,7 @@ export default function AdminFlexiPayLedger({ order, onOrderUpdated, formatPrice
     setSuccessMsg('');
 
     try {
-      const res = await axios.post(`/api/admin/installments/${recordingInst.id}/record-payment`, {
+      const res = await api.post(`/api/admin/installments/${recordingInst.id}/record-payment`, {
         payment_method: offlineMethod,
         transaction_ref: txnRef || undefined,
         notes: notes || `Admin verified offline payment via ${offlineMethod}`,

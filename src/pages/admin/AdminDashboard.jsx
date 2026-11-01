@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api/axios';
 import { useStore } from '../../context/StoreContext';
 import ProductManager from './ProductManager';
 import CategoryManager from './CategoryManager';
@@ -59,7 +59,7 @@ export default function AdminDashboard({ onBackToStorefront }) {
     try {
       setLoading(true);
       const targetStore = overrideStoreId !== null ? overrideStoreId : selectedStoreId;
-      const res = await axios.get('/api/admin/dashboard/stats', {
+      const res = await api.get('/api/admin/dashboard/stats', {
         params: { store_id: targetStore }
       });
       setStats(res.data);

@@ -1,6 +1,6 @@
 /**
  * Unified image URL resolver for FlexiStore Pro / Khaam Poshak.
- * Resolves local uploaded assets against VITE_API_BASE_URL when deployed,
+ * Resolves local uploaded assets against VITE_API_URL / VITE_API_BASE_URL when deployed,
  * or leaves them relative for Vite proxy in development.
  */
 export function getImageUrl(
@@ -15,10 +15,12 @@ export function getImageUrl(
     return path;
   }
 
-  const apiBase = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
+  const rawApiUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || '';
+  // Strip trailing /api to get asset origin root for /uploads/ or /storage/
+  const apiBase = rawApiUrl.replace(/\/api\/?$/, '').replace(/\/+$/, '');
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
 
-  // If API base URL is provided (e.g. Render backend), prepend it
+  // If API base URL is provided (e.g. deployed backend), prepend it
   if (apiBase) {
     return `${apiBase}${cleanPath}`;
   }

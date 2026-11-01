@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import api from '../../api/axios';
 import { useStore } from '../../context/StoreContext';
 import {
   Plus,
@@ -281,8 +281,8 @@ export default function ProductManager() {
       const storeParam = store?.id ? `&store_id=${store.id}` : '';
       const catParam = store?.id ? `?store_id=${store.id}` : '';
       const [prodRes, catRes] = await Promise.all([
-        axios.get(`/api/products?per_page=50${storeParam}`),
-        axios.get(`/api/categories${catParam}`),
+        api.get(`/api/products?per_page=50${storeParam}`),
+        api.get(`/api/categories${catParam}`),
       ]);
       setProducts(prodRes.data.data || prodRes.data || []);
       setCategories(catRes.data || []);
@@ -395,7 +395,7 @@ export default function ProductManager() {
     });
 
     try {
-      const res = await axios.post('/api/admin/products/upload-images', uploadPayload, {
+      const res = await api.post('/api/admin/products/upload-images', uploadPayload, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
@@ -668,10 +668,10 @@ export default function ProductManager() {
       };
 
       if (editingProduct) {
-        await axios.put(`/api/admin/products/${editingProduct.id}`, payload);
+        await api.put(`/api/admin/products/${editingProduct.id}`, payload);
         setMessage('Product updated successfully!');
       } else {
-        await axios.post('/api/admin/products', payload);
+        await api.post('/api/admin/products', payload);
         setMessage('New product created successfully with images and attributes!');
       }
 
@@ -689,7 +689,7 @@ export default function ProductManager() {
   const handleDelete = async (id) => {
     if (!confirm('Are you sure you want to delete this product?')) return;
     try {
-      await axios.delete(`/api/admin/products/${id}`);
+      await api.delete(`/api/admin/products/${id}`);
       fetchProducts();
     } catch (err) {
       console.error('Failed to delete product:', err);

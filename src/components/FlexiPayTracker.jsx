@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import {
   Sparkles,
   CheckCircle2,
@@ -49,7 +49,7 @@ export default function FlexiPayTracker({
     setActionSuccess(null);
 
     try {
-      const res = await axios.post(`/api/installments/${payingInstallment.id}/pay`, {
+      const res = await api.post(`/api/installments/${payingInstallment.id}/pay`, {
         payment_method: selectedGateway,
         account_number: accountNumber,
       });

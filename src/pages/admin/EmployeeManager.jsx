@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api/axios';
 import {
   Users,
   UserPlus,
@@ -56,7 +56,7 @@ export default function EmployeeManager() {
       if (roleFilter !== 'all') params.append('role', roleFilter);
       if (statusFilter !== 'all') params.append('status', statusFilter);
 
-      const res = await axios.get(`/api/admin/employees?${params.toString()}`);
+      const res = await api.get(`/api/admin/employees?${params.toString()}`);
       setEmployees(res.data.data || res.data || []);
     } catch (err) {
       console.error('Failed to load employees:', err);
@@ -67,7 +67,7 @@ export default function EmployeeManager() {
 
   useEffect(() => {
     fetchEmployees();
-    axios.get('/api/store/all')
+    api.get('/api/store/all')
       .then(res => setAvailableStores(res.data?.stores || []))
       .catch(err => console.warn('Could not fetch stores list:', err));
   }, [roleFilter, statusFilter]);
@@ -131,10 +131,10 @@ export default function EmployeeManager() {
 
     try {
       if (editingEmployee) {
-        await axios.put(`/api/admin/employees/${editingEmployee.id}`, formData);
+        await api.put(`/api/admin/employees/${editingEmployee.id}`, formData);
         setSuccessMsg(`Employee ${formData.name} updated successfully!`);
       } else {
-        await axios.post('/api/admin/employees', formData);
+        await api.post('/api/admin/employees', formData);
         setSuccessMsg(`New employee ${formData.name} created!`);
       }
 
@@ -150,7 +150,7 @@ export default function EmployeeManager() {
 
   const handleToggleStatus = async (emp) => {
     try {
-      const res = await axios.patch(`/api/admin/employees/${emp.id}/toggle-status`);
+      const res = await api.patch(`/api/admin/employees/${emp.id}/toggle-status`);
       setSuccessMsg(res.data.message);
       fetchEmployees();
       setTimeout(() => setSuccessMsg(''), 3000);
@@ -164,7 +164,7 @@ export default function EmployeeManager() {
       return;
     }
     try {
-      const res = await axios.delete(`/api/admin/employees/${emp.id}`);
+      const res = await api.delete(`/api/admin/employees/${emp.id}`);
       setSuccessMsg(res.data.message);
       fetchEmployees();
       setTimeout(() => setSuccessMsg(''), 3000);

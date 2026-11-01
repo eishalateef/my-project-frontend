@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api/axios';
 import { useStore } from '../../context/StoreContext';
 import {
   ShoppingBag,
@@ -58,8 +58,8 @@ export default function OrderManager() {
       setError(null);
       const storeParam = store?.id ? `?store_id=${store.id}` : '';
       const [ordersRes, ridersRes] = await Promise.all([
-        axios.get(`/api/admin/orders${storeParam}`),
-        axios.get('/api/admin/riders'),
+        api.get(`/api/admin/orders${storeParam}`),
+        api.get('/api/admin/riders'),
       ]);
       setOrders(ordersRes.data?.data || ordersRes.data || []);
       setRiders(ridersRes.data || []);
@@ -77,7 +77,7 @@ export default function OrderManager() {
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      await axios.patch(`/api/admin/orders/${orderId}/status`, { status: newStatus });
+      await api.patch(`/api/admin/orders/${orderId}/status`, { status: newStatus });
       setActionFeedback(`Order #${orderId} status changed to ${newStatus.toUpperCase()}`);
       setTimeout(() => setActionFeedback(null), 3500);
       fetchOrders();
@@ -89,7 +89,7 @@ export default function OrderManager() {
 
   const handleAssignRider = async (orderId, riderId) => {
     try {
-      await axios.patch(`/api/admin/orders/${orderId}/assign-rider`, { delivery_user_id: riderId });
+      await api.patch(`/api/admin/orders/${orderId}/assign-rider`, { delivery_user_id: riderId });
       const assignedRider = riders.find((r) => r.id === Number(riderId));
       setActionFeedback(`Courier ${assignedRider?.name || ''} assigned to order #${orderId}`);
       setTimeout(() => setActionFeedback(null), 3500);

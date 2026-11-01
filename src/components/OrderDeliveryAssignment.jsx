@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import {
   Truck,
   Check,
@@ -163,7 +163,7 @@ export default function OrderDeliveryAssignment({
         delivery_user_id: deliveryType === 'own_rider' ? (deliveryUserId || null) : null,
       };
 
-      const res = await axios.patch(`/api/admin/orders/${order.id}/assign-delivery`, payload);
+      const res = await api.patch(`/api/admin/orders/${order.id}/assign-delivery`, payload);
 
       setFeedback({
         type: 'success',

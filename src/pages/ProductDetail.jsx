@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/axios';
 import { useStore } from '../context/StoreContext';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -95,7 +95,7 @@ export default function ProductDetail({ productId: propProductId, onBack, onSele
     const fetchDetail = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`/api/products/${activeIdentifier}`);
+        const res = await api.get(`/api/products/${activeIdentifier}`);
         const data = res.data;
         setProductData(data);
 

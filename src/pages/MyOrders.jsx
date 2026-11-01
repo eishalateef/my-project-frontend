@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import { useStore } from '../context/StoreContext';
 import {
@@ -51,13 +51,13 @@ export default function MyOrders({ onNavigate }) {
       // Try authenticated route first, fallback to resilient customer-public
       let res;
       try {
-        res = await axios.get('/api/customer/orders', {
+        res = await api.get('/api/customer/orders', {
           headers,
           params: user ? { user_id: user.id, email: user.email } : {},
         });
       } catch (authErr) {
         // Fallback to customer-public endpoint
-        res = await axios.get('/api/customer-public/orders', {
+        res = await api.get('/api/customer-public/orders', {
           params: user ? { user_id: user.id, email: user.email } : {},
         });
       }
@@ -81,7 +81,7 @@ export default function MyOrders({ onNavigate }) {
     setGuestError('');
 
     try {
-      const res = await axios.get('/api/customer-public/orders', {
+      const res = await api.get('/api/customer-public/orders', {
         params: { phone: guestPhone.trim() },
       });
       const data = res.data?.data || res.data || [];
@@ -116,8 +116,8 @@ export default function MyOrders({ onNavigate }) {
       const token = localStorage.getItem('flexi_token');
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-      const res = await axios.post(`/api/customer/orders/${orderId}/cancel`, {}, { headers })
-        .catch(() => axios.post(`/api/customer-public/orders/${orderId}/cancel`, {}));
+      const res = await api.post(`/api/customer/orders/${orderId}/cancel`, {}, { headers })
+        .catch(() => api.post(`/api/customer-public/orders/${orderId}/cancel`, {}));
 
       if (res.data.success) {
         setCancelFeedback(res.data.message || 'Order cancelled successfully.');

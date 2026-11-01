@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/axios';
 import { useStore } from '../context/StoreContext';
 import ProductCard from '../components/ProductCard';
 import DynamicFilters, { getColorHex } from '../components/DynamicFilters';
@@ -101,7 +101,7 @@ export default function ProductListing({ onSelectProduct, initialParams = {} }) 
 
   // Fetch Categories & All Store Products
   useEffect(() => {
-    axios
+    api
       .get('/api/categories')
       .then((res) => {
         const catList = res.data || [];
@@ -117,7 +117,7 @@ export default function ProductListing({ onSelectProduct, initialParams = {} }) 
       })
       .catch(console.warn);
 
-    axios
+    api
       .get('/api/products?per_page=100')
       .then((res) => {
         setAllStoreProducts(res.data.data || res.data || []);
@@ -158,7 +158,7 @@ export default function ProductListing({ onSelectProduct, initialParams = {} }) 
           });
         }
 
-        const res = await axios.get('/api/products', { params });
+        const res = await api.get('/api/products', { params });
         if (isCurrent) {
           setProducts(res.data.data || res.data || []);
         }

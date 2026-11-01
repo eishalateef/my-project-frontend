@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/axios';
 import { useStore } from '../context/StoreContext';
 import { CheckCircle2, PackageCheck, Truck, Phone, MapPin, ArrowRight, XCircle, AlertCircle, RefreshCw, Printer } from 'lucide-react';
 import ShippingInvoiceModal from '../components/ShippingInvoiceModal';
@@ -25,7 +25,7 @@ export default function OrderSuccess({ order: initialOrder, onContinueShopping }
 
     const checkLatestStatus = async () => {
       try {
-        const res = await axios.get(`/api/orders/lookup/${targetOrderNumber}`);
+        const res = await api.get(`/api/orders/lookup/${targetOrderNumber}`);
         if (res.data?.order) {
           setOrder(res.data.order);
         }

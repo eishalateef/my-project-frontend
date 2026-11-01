@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api/axios';
 import {
   Mail,
   Search,
@@ -28,7 +28,7 @@ export default function SubscriberManager() {
   const fetchSubscribers = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('/api/admin/newsletter/subscribers', {
+      const res = await api.get('/api/admin/newsletter/subscribers', {
         params: {
           search: search.trim() || undefined,
           status: statusFilter !== 'all' ? statusFilter : undefined,
@@ -59,7 +59,7 @@ export default function SubscriberManager() {
 
   const handleToggleStatus = async (id) => {
     try {
-      const res = await axios.patch(`/api/admin/newsletter/subscribers/${id}/toggle-status`);
+      const res = await api.patch(`/api/admin/newsletter/subscribers/${id}/toggle-status`);
       if (res.data?.success) {
         setActionNotice({ type: 'success', text: res.data.message });
         fetchSubscribers();
@@ -73,7 +73,7 @@ export default function SubscriberManager() {
   const handleDelete = async (id, email) => {
     if (!window.confirm(`Are you sure you want to remove ${email} from VIP subscribers?`)) return;
     try {
-      const res = await axios.delete(`/api/admin/newsletter/subscribers/${id}`);
+      const res = await api.delete(`/api/admin/newsletter/subscribers/${id}`);
       if (res.data?.success) {
         setActionNotice({ type: 'success', text: `Subscriber ${email} deleted.` });
         fetchSubscribers();

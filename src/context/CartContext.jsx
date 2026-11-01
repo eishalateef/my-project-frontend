@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { useAuth } from './AuthContext';
 import { AlertCircle, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { getImageUrl } from '../utils/imageUrl';
@@ -88,7 +88,7 @@ export const CartProvider = ({ children }) => {
   // Synchronize cart items with live database stock and auto-clamp any oversold quantities
   useEffect(() => {
     let isMounted = true;
-    axios
+    api
       .get('/api/products?per_page=100')
       .then((res) => {
         if (!isMounted) return;

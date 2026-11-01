@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/axios';
 import { useStore } from '../context/StoreContext';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -60,7 +60,7 @@ export default function TrackOrder() {
     setError('');
 
     try {
-      const res = await axios.get('/api/orders/track', {
+      const res = await api.get('/api/orders/track', {
         params: {
           order_number: cleanNum,
         },
@@ -101,7 +101,7 @@ export default function TrackOrder() {
 
     const interval = setInterval(() => {
       setIsAutoRefreshing(true);
-      axios.get('/api/orders/track', {
+      api.get('/api/orders/track', {
         params: {
           order_number: order.order_number,
         },

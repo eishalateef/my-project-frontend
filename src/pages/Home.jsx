@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/axios';
 import { useStore } from '../context/StoreContext';
 import ProductCard from '../components/ProductCard';
 import SizeChartModal from '../components/SizeChartModal';
@@ -101,7 +101,7 @@ export default function Home({ onSelectProduct, onViewCatalog }) {
     setNewsletterLoading(true);
     setNewsletterError('');
     try {
-      const res = await axios.post('/api/newsletter/subscribe', {
+      const res = await api.post('/api/newsletter/subscribe', {
         email,
         source: 'homepage_vip_banner',
       });
@@ -134,8 +134,8 @@ export default function Home({ onSelectProduct, onViewCatalog }) {
     const fetchData = async () => {
       try {
         const [prodRes, catRes] = await Promise.all([
-          axios.get('/api/products?per_page=30'),
-          axios.get('/api/categories'),
+          api.get('/api/products?per_page=30'),
+          api.get('/api/categories'),
         ]);
         const prods = prodRes.data.data || prodRes.data || [];
         const cats = catRes.data || [];

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { useCart } from '../context/CartContext';
 import { useStore } from '../context/StoreContext';
 import { useAuth } from '../context/AuthContext';
@@ -205,7 +205,7 @@ export default function Checkout({ onBackToShopping, onOrderSuccess }) {
     setSendingOtp(true);
 
     try {
-      const res = await axios.post('/api/otp/send', { phone: formData.phone.trim() });
+      const res = await api.post('/api/otp/send', { phone: formData.phone.trim() });
       if (res.data.success) {
         setOtpSent(true);
         setIsRealSms(Boolean(res.data.is_real_sms));
@@ -236,7 +236,7 @@ export default function Checkout({ onBackToShopping, onOrderSuccess }) {
     setVerifyingOtp(true);
 
     try {
-      const res = await axios.post('/api/otp/verify', {
+      const res = await api.post('/api/otp/verify', {
         phone: formData.phone.trim(),
         otp_code: otpCode.trim(),
       });
@@ -312,7 +312,7 @@ export default function Checkout({ onBackToShopping, onOrderSuccess }) {
     // If Online Payment (JazzCash, Easypaisa, PayFast), initiate payment session
     setSubmittingOrder(true);
     try {
-      const initRes = await axios.post('/api/payment/initiate', {
+      const initRes = await api.post('/api/payment/initiate', {
         gateway: formData.payment_method,
         amount: finalPayable,
         account_number: formData.wallet_number || formData.phone,
@@ -343,7 +343,7 @@ export default function Checkout({ onBackToShopping, onOrderSuccess }) {
 
     try {
       // 1. Verify payment with backend gateway
-      const verifyRes = await axios.post('/api/payment/verify', {
+      const verifyRes = await api.post('/api/payment/verify', {
         gateway: activeGateway,
         transaction_id: paymentSession.transaction_id,
         mpin: walletMpin,
@@ -417,7 +417,7 @@ export default function Checkout({ onBackToShopping, onOrderSuccess }) {
         })),
       };
 
-      const res = await axios.post('/api/checkout', payload);
+      const res = await api.post('/api/checkout', payload);
       if (res.data.success && res.data.order) {
         clearCart();
         try {

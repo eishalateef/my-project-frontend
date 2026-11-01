@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { STORE_CONFIGS, applyThemeClass, formatPrice as formatPriceUtil } from '../storeConfig';
 
 const StoreContext = createContext(null);
@@ -44,7 +44,7 @@ export const StoreProvider = ({ children }) => {
   // Fetch active main store on initial mount
   const fetchActiveStore = async () => {
     try {
-      const res = await axios.get('/api/store/active');
+      const res = await api.get('/api/store/active');
       if (res.data && res.data.store) {
         setStore(res.data.store);
         setAvailableAttributes(res.data.available_attributes || {});
